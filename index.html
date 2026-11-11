@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registry Signal Monitor · VitaSmart™ · Bridge to Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Open+Sans:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="console-bar">
+  <div class="cb-left">
+    <div class="cb-title">Registry Signal Monitor</div>
+    <div class="cb-sub" id="cbSub">Bridge to HOPE Registry</div>
+  </div>
+  <div class="cb-mid" id="cbMid"></div>
+  <div class="cb-logo" aria-label="Bridge to Life">
+    <svg viewBox="0 0 76 34" width="62" height="28" aria-hidden="true">
+      <path d="M2 9 C 24 4, 52 2, 74 3 C 54 6, 34 10, 18 16 Z" fill="#FFD100"/>
+      <path d="M8 16 C 26 10, 48 6, 70 6 C 50 11, 34 16, 22 23 Z" fill="#48D597"/>
+      <path d="M12 23 C 26 16, 42 11, 64 10 C 46 16, 32 23, 20 31 Z" fill="#3DA577" opacity=".9"/>
+      <path d="M14 31 C 30 22, 44 15, 62 13 C 46 20, 34 27, 26 33 Z" fill="#428FDE"/>
+    </svg>
+    <span class="wm">BRIDGE <small>TO</small> LIFE<sup>™</sup></span>
+  </div>
+</header>
+<nav class="tabs">
+  <a>Overview</a><a>Centers</a><a>Perfusion Cases</a><a class="on">Signal Monitor <span class="new">New</span></a><a>Exports</a>
+  <div class="tabs-right"><span class="pill-outline">North America</span></div>
+</nav>
+<div class="announce" id="announce"></div>
+
+<main class="wrap">
+  <section class="col-left card">
+    <div class="card-h"><h3>Centers</h3><span class="muted" id="centerCount"></span></div>
+    <table class="tbl" id="centerTbl">
+      <thead><tr><th>Center</th><th class="r">Cases</th><th class="r">DCD</th><th class="r">O / E</th><th>Risk-adjusted</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="legend"><span class="chip c-red">Signal</span> crossed its control limit &nbsp; <span class="chip c-amber">Watch</span> above 70% of limit &nbsp; <span class="chip c-green">In control</span></div>
+  </section>
+
+  <section class="col-main">
+    <div class="screen card">
+      <div class="screen-h">
+        <div><h2 id="selTitle"></h2><div class="muted" id="selSub"></div></div>
+        <div class="seg" id="viewSeg"><button data-v="both" class="on">Both charts</button><button data-v="adj">Risk-adjusted</button><button data-v="unadj">Unadjusted</button></div>
+      </div>
+      <div class="graph-wrap">
+        <div class="side-labels"><span class="lab lab-res">Adj.</span><span class="lab lab-flow">Unadj.</span></div>
+        <svg id="chart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
+        <div class="readout"><div class="ro-k">CUSUM</div><div class="ro-v" id="roV"></div><div class="ro-k">Limit h</div><div class="ro-v small" id="roH"></div></div>
+      </div>
+      <div class="tiles">
+        <div class="tile t-red"><div class="tl">Observed losses<br><span>90-day graft loss</span></div><div class="tv" id="tObs"></div></div>
+        <div class="tile t-red"><div class="tl">Expected<br><span>risk-adjusted, to date</span></div><div class="tv" id="tExp"></div></div>
+        <div class="tile t-red"><div class="tl">Signal<br><span id="tSigSub">first crossing</span></div><div class="tv" id="tSig"></div></div>
+        <div class="tile t-blue"><div class="tl">False-alarm check<br><span>fresh in-control simulations</span></div><div class="tv" id="tFar"></div></div>
+      </div>
+    </div>
+
+    <div class="lower">
+      <div class="card">
+        <div class="card-h"><h3>What is driving it</h3><span class="muted">observed vs expected by case type</span></div>
+        <table class="tbl striped" id="drvTbl"><thead><tr><th>Case type</th><th class="r">Cases</th><th class="r">Observed</th><th class="r">Expected</th><th class="r">O / E</th></tr></thead><tbody></tbody></table>
+        <p class="note" id="drvNote"></p>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Monitor settings</h3><span class="muted" id="runMeta"></span></div>
+        <div class="ctrl">
+          <label>Detect a rise in loss hazard of</label>
+          <div class="seg" id="rhoSeg"><button data-r="1.5">1.5×</button><button data-r="2" class="on">2×</button><button data-r="3">3×</button></div>
+        </div>
+        <div class="ctrl">
+          <label>False-alarm budget per center (monitoring window)</label>
+          <div class="seg" id="alphaSeg"><button data-a="0.01">1%</button><button data-a="0.05" class="on">5%</button><button data-a="0.1">10%</button></div>
+        </div>
+        <div class="model">
+          <div class="mh">Risk model (fitted on <b id="nLab"></b> cases with a closed 90-day window)</div>
+          <table class="tbl compact" id="betaTbl"><tbody></tbody></table>
+        </div>
+        <details class="truth"><summary>Synthetic ground truth (for checking the method)</summary><div id="truth"></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="foot">Unofficial concept demo by Mohith Gajjela. Not affiliated with Bridge to Life. Synthetic data; center codes are anonymous and no real patient or program outcomes are shown.</footer>
+<script src="core/monitor.js"></script>
+<script src="data/registry.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
