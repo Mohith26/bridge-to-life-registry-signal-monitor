@@ -95,7 +95,7 @@
     var dcd = d[0], dbd = d[1];
     var note = 'Overall O/E ' + fmt2(c.oe) + '. ';
     if (c.oe != null && c.oe >= 1.3 && top) {
-      note += 'The excess is highest in ' + top.label.toLowerCase() + ' (O/E ' + top.oe.toFixed(2) + '). ';
+      note += 'The excess is highest in ' + top.label.charAt(0).toLowerCase() + top.label.slice(1) + ' (O/E ' + top.oe.toFixed(2) + '). ';
       note += (dbd.oe != null && dcd.oe != null && dbd.oe >= 1.5 && dcd.oe >= 1.5) ?
         'It shows up in both DCD and DBD grafts, so case mix does not explain it. Next step: review procurement and perfusion logs for the cases since the chart started climbing.' :
         'Compare against perfusion logs for these cases.';
